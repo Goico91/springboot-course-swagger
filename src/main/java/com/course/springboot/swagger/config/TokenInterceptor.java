@@ -1,5 +1,6 @@
 package com.course.springboot.swagger.config;
 
+import com.course.springboot.swagger.commons.Constants;
 import com.course.springboot.swagger.commons.enums.RestExceptionE;
 import com.course.springboot.swagger.config.error.RestException;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws RestException {
         LOG.info("[preHandle][" + request + "]" + "[" + request.getMethod() + "]" + request.getRequestURI());
         String auth = request.getHeader(authHeader);
-        if(auth == null || !"allowed".equals(auth))
+        if(auth == null || !Constants.AUTH_TOKEN.equals(auth))
             throw new RestException(RestExceptionE.UNAUTHORIZED);
         return true;
     }

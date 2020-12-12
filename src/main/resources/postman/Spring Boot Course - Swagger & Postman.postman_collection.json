@@ -1,0 +1,514 @@
+{
+	"info": {
+		"_postman_id": "d648bd6e-4236-47e8-a7dc-c2236efbe4ce",
+		"name": "Spring Boot Course - Swagger & Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Employees",
+			"item": [
+				{
+					"name": "Get Employees",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "be11f1bf-acf2-481f-952c-89ae4aded6fd",
+								"exec": [
+									"// Check if we have the token",
+									"if( pm.environment.get('AUTHORIZATION_VALUE') === '' ) {",
+									"    let url = pm.environment.get(\"HOST\") + ':' + pm.environment.get(\"PORT\") + '/' + pm.environment.get(\"API\") + '/auth';",
+									"",
+									"    // Build login request",
+									"    let request = {",
+									"        url: url,",
+									"        method: 'GET'",
+									"    };",
+									"",
+									"    // Make the login request",
+									"    pm.sendRequest(request, function (err, res) {",
+									"        console.log(err ? err : res.json());",
+									"        if (err === null && ( res.code == 201 || res.code == 200 ) ) {",
+									"            console.log('Saving the token');",
+									"            let jsonData = res.json();",
+									"            pm.environment.set(\"AUTHORIZATION_VALUE\", jsonData.token);",
+									"        }",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b86f164d-11e5-4c66-9e82-cc1e59fa11d0",
+								"exec": [
+									"// Check if we receive an ERROR",
+									"if( responseCode.code == 401 || ( responseCode.code == 500 && pm.response.json().developerMessage === 'Invalid Token' ) ) {",
+									"    pm.environment.set('AUTHORIZATION_VALUE', '');",
+									"}",
+									"",
+									"// Check if we receive HTTP_STATUS OK",
+									"if( responseCode.code == 200 ) {",
+									"    let lastIndex = pm.response.json().length - 1;",
+									"    pm.environment.set('ID', pm.response.json()[lastIndex].idEmployee );",
+									"}",
+									"",
+									"pm.test(\"Response must be valid and have a body\", function () {",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{AUTHORIZATION_KEY}}",
+								"value": "{{AUTHORIZATION_VALUE}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}:{{PORT}}/{{API}}/{{EMPLOYEE_API}}?page={{PAGE}}&size={{SIZE}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"{{API}}",
+								"{{EMPLOYEE_API}}"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Adams",
+									"disabled": true
+								},
+								{
+									"key": "surname",
+									"value": "Usman",
+									"disabled": true
+								},
+								{
+									"key": "office",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "{{PAGE}}"
+								},
+								{
+									"key": "size",
+									"value": "{{SIZE}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Employees",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "{{AUTHORIZATION_KEY}}",
+										"value": "{{AUTHORIZATION_VALUE}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{HOST}}:{{PORT}}/{{API}}/{{EMPLOYEE_API}}?page={{PAGE}}&size={{SIZE}}",
+									"host": [
+										"{{HOST}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"{{API}}",
+										"{{EMPLOYEE_API}}"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Adams",
+											"disabled": true
+										},
+										{
+											"key": "surname",
+											"value": "Usman",
+											"disabled": true
+										},
+										{
+											"key": "office",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "{{PAGE}}"
+										},
+										{
+											"key": "size",
+											"value": "{{SIZE}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 12 Dec 2020 13:47:52 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"idEmployee\": 1,\n        \"name\": \"Adams\",\n        \"surname\": \"Usman\",\n        \"age\": 20,\n        \"office\": {\n            \"id\": 1,\n            \"name\": \"Asturias\",\n            \"country\": \"Spain\"\n        }\n    },\n    {\n        \"idEmployee\": 2,\n        \"name\": \"Baker\",\n        \"surname\": \"Hills\",\n        \"age\": 22,\n        \"office\": {\n            \"id\": 2,\n            \"name\": \"Barcelona\",\n            \"country\": \"Spain\"\n        }\n    },\n    {\n        \"idEmployee\": 3,\n        \"name\": \"Clark\",\n        \"surname\": \"Irwin\",\n        \"age\": 26,\n        \"office\": {\n            \"id\": 3,\n            \"name\": \"Madrid\",\n            \"country\": \"Spain\"\n        }\n    },\n    {\n        \"idEmployee\": 4,\n        \"name\": \"Davis\",\n        \"surname\": \"Jones\",\n        \"age\": 30,\n        \"office\": {\n            \"id\": 4,\n            \"name\": \"Sevilla\",\n            \"country\": \"Spain\"\n        }\n    },\n    {\n        \"idEmployee\": 5,\n        \"name\": \"Evans\",\n        \"surname\": \"Klein\",\n        \"age\": 34,\n        \"office\": {\n            \"id\": 1,\n            \"name\": \"Asturias\",\n            \"country\": \"Spain\"\n        }\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Employee by id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c84985b5-2934-4a7e-93b1-8bb57f691c3e",
+								"exec": [
+									"// Check if we have the token",
+									"if( pm.environment.get('AUTHORIZATION_VALUE') === '' ) {",
+									"    let url = pm.environment.get(\"HOST\") + ':' + pm.environment.get(\"PORT\") + '/' + pm.environment.get(\"API\") + '/auth';",
+									"",
+									"    // Build login request",
+									"    let request = {",
+									"        url: url,",
+									"        method: 'GET'",
+									"    };",
+									"",
+									"    // Make the login request",
+									"    pm.sendRequest(request, function (err, res) {",
+									"        console.log(err ? err : res.json());",
+									"        if (err === null && ( res.code == 201 || res.code == 200 ) ) {",
+									"            console.log('Saving the token');",
+									"            let jsonData = res.json();",
+									"            pm.environment.set(\"AUTHORIZATION_VALUE\", jsonData.token);",
+									"        }",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "312820c2-3df3-42dd-9c8a-d7d903cc9c8c",
+								"exec": [
+									"pm.test(\"Response must be valid and have a body\", function () {",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{AUTHORIZATION_KEY}}",
+								"value": "{{AUTHORIZATION_VALUE}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}:{{PORT}}/{{API}}/{{EMPLOYEE_API}}/{{ID}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"{{API}}",
+								"{{EMPLOYEE_API}}",
+								"{{ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Employee",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ae2a7f73-7d75-4b35-b12a-258b2fb1b862",
+								"exec": [
+									"// Check if we have the token",
+									"if( pm.environment.get('AUTHORIZATION_VALUE') === '' ) {",
+									"    let url = pm.environment.get(\"HOST\") + ':' + pm.environment.get(\"PORT\") + '/' + pm.environment.get(\"API\") + '/auth';",
+									"",
+									"    // Build login request",
+									"    let request = {",
+									"        url: url,",
+									"        method: 'GET'",
+									"    };",
+									"",
+									"    // Make the login request",
+									"    pm.sendRequest(request, function (err, res) {",
+									"        console.log(err ? err : res.json());",
+									"        if (err === null && ( res.code == 201 || res.code == 200 ) ) {",
+									"            console.log('Saving the token');",
+									"            let jsonData = res.json();",
+									"            pm.environment.set(\"AUTHORIZATION_VALUE\", jsonData.token);",
+									"        }",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "bc37660d-30e1-4d87-b43b-d68e9565e805",
+								"exec": [
+									"// Check if we receive HTTP_STATUS Created",
+									"if( responseCode.code == 201 ) {",
+									"    let url = pm.environment.get(\"HOST\") + ':' + pm.environment.get(\"PORT\") + '/' + pm.environment.get(\"API\") + '/' + pm.environment.get(\"EMPLOYEE_API\");",
+									"    // Build login request",
+									"    let request = {",
+									"        url: url,",
+									"        method: 'GET'",
+									"    };",
+									"",
+									"    pm.sendRequest(request, function (err, res) {",
+									"        console.log(err ? err : res.json());",
+									"        if (err === null && ( res.code == 201 || res.code == 200 ) ) {",
+									"            console.log('Saving the token');",
+									"            let lastIndex = pm.response.json().length - 1;",
+									"            pm.environment.set('ID', pm.response.json()[lastIndex].idEmployee );",
+									"        }",
+									"        console.log(res.json());",
+									"    });",
+									"}",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "{{AUTHORIZATION_KEY}}",
+								"value": "{{AUTHORIZATION_VALUE}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Carlos2\",\n    \"surname\": \"Goicoechea2\",\n    \"password\": \"12345678\",\n    \"age\": 20,\n    \"office\": {\n        \"id\": 1\n    },\n    \"employeeKnowledge\": [\n        {\n            \"knowledge\": {\n                \"id\": 1\n            },\n            \"yearsExperience\": 3,\n            \"level\": \"low\"\n        },\n        {\n            \"knowledge\": {\n                \"id\": 2\n            },\n            \"yearsExperience\": 4,\n            \"level\": \"low\"\n        },\n        {\n            \"knowledge\": {\n                \"id\": 4\n            },\n            \"yearsExperience\": 1,\n            \"level\": \"medium\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}:{{PORT}}/{{API}}/{{EMPLOYEE_API}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"{{API}}",
+								"{{EMPLOYEE_API}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Employee",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "651346a8-3dde-4202-a150-b6aea6100938",
+								"exec": [
+									"// Check if we have the token",
+									"if( pm.environment.get('AUTHORIZATION_VALUE') === '' ) {",
+									"    let url = pm.environment.get(\"HOST\") + ':' + pm.environment.get(\"PORT\") + '/' + pm.environment.get(\"API\") + '/auth';",
+									"",
+									"    // Build login request",
+									"    let request = {",
+									"        url: url,",
+									"        method: 'GET'",
+									"    };",
+									"",
+									"    // Make the login request",
+									"    pm.sendRequest(request, function (err, res) {",
+									"        console.log(err ? err : res.json());",
+									"        if (err === null && ( res.code == 201 || res.code == 200 ) ) {",
+									"            console.log('Saving the token');",
+									"            let jsonData = res.json();",
+									"            pm.environment.set(\"AUTHORIZATION_VALUE\", jsonData.token);",
+									"        }",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "01a341c4-7fe7-49f9-a7b7-31a5d568c843",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "{{AUTHORIZATION_KEY}}",
+								"value": "{{AUTHORIZATION_VALUE}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Carlos5\",\n    \"surname\": \"Goicoechea5\",\n    \"password\": \"12345678\",\n    \"age\": 26,\n    \"office\": {\n        \"id\": 2\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}:{{PORT}}/{{API}}/{{EMPLOYEE_API}}/{{ID}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"{{API}}",
+								"{{EMPLOYEE_API}}",
+								"{{ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Employees",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fcf77dba-e757-4f65-a522-dddbda41ef21",
+								"exec": [
+									"// Check if we have the token",
+									"if( pm.environment.get('AUTHORIZATION_VALUE') === '' ) {",
+									"    let url = pm.environment.get(\"HOST\") + ':' + pm.environment.get(\"PORT\") + '/' + pm.environment.get(\"API\") + '/auth';",
+									"",
+									"    // Build login request",
+									"    let request = {",
+									"        url: url,",
+									"        method: 'GET'",
+									"    };",
+									"",
+									"    // Make the login request",
+									"    pm.sendRequest(request, function (err, res) {",
+									"        console.log(err ? err : res.json());",
+									"        if (err === null && ( res.code == 201 || res.code == 200 ) ) {",
+									"            console.log('Saving the token');",
+									"            let jsonData = res.json();",
+									"            pm.environment.set(\"AUTHORIZATION_VALUE\", jsonData.token);",
+									"        }",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "e6c922f5-f9d9-40ca-8410-310ca769199d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "{{AUTHORIZATION_KEY}}",
+								"value": "{{AUTHORIZATION_VALUE}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}:{{PORT}}/{{API}}/{{EMPLOYEE_API}}/{{ID}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"{{API}}",
+								"{{EMPLOYEE_API}}",
+								"{{ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

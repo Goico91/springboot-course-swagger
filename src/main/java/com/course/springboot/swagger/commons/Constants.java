@@ -7,7 +7,10 @@ public class Constants {
     }
 
     public static final String API_EMPLOYEES = "/employees";
+    public static final String API_AUTH = "/auth";
     public static final String ID = "/{id}";
+
+    public static final String AUTH_TOKEN = "allowed";
 
     public static final String OK_CODE_RESPONSE = "200";
     public static final String CREATED_CODE_RESPONSE = "201";
