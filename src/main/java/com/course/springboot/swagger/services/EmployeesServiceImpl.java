@@ -7,7 +7,6 @@ import com.course.springboot.swagger.repositories.EmployeesRepository;
 import com.course.springboot.swagger.vo.Employee;
 import com.course.springboot.swagger.vo.EmployeeKnowledge;
 import com.course.springboot.swagger.vo.EmployeeKnowledgeKey;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,11 +21,14 @@ import java.util.Optional;
 @Service
 public class EmployeesServiceImpl implements EmployeesService{
 
-    @Autowired
-    private EmployeesRepository employeesRepository;
+    private final EmployeesRepository employeesRepository;
 
-    @Autowired
-    private EmployeeKnowledgeRepository employeeKnowledgeRepository;
+    private final EmployeeKnowledgeRepository employeeKnowledgeRepository;
+
+    public EmployeesServiceImpl(EmployeesRepository employeesRepository, EmployeeKnowledgeRepository employeeKnowledgeRepository) {
+        this.employeesRepository = employeesRepository;
+        this.employeeKnowledgeRepository = employeeKnowledgeRepository;
+    }
 
     @Override
     public List<Employee> getEmployees(String name, String surname, Integer office, Pageable pageable) {

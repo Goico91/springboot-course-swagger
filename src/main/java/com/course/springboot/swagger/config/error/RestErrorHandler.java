@@ -2,7 +2,6 @@ package com.course.springboot.swagger.config.error;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,6 @@ public class RestErrorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RestErrorHandler.class.getName());
     private final MessageSource messageSource;
 
-    @Autowired
     public RestErrorHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
     }

@@ -24,10 +24,11 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws RestException {
         LOG.info("[preHandle][" + request + "]" + "[" + request.getMethod() + "]" + request.getRequestURI());
         String auth = request.getHeader(authHeader);
-        if("not-allowed".equals(auth))
+        if(auth == null || !"allowed".equals(auth))
             throw new RestException(RestExceptionE.UNAUTHORIZED);
         return true;
     }
+
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         LOG.info("[postHandle][" + request + "]");

@@ -1,6 +1,7 @@
 package com.course.springboot.swagger.controllers.dto;
 
 import com.course.springboot.swagger.vo.Office;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -11,12 +12,15 @@ import java.util.List;
 
 public class EmployeeDTO implements Serializable {
 
+    @ApiModelProperty(value = "Name of the Employee", required = true, example = "Carlos")
     @NotNull(message = "Name can not be null")
     private String name;
 
+    @ApiModelProperty(value = "Surname of the Employee", required = true, example = "Goicoechea")
     @NotBlank(message = "Surname can not be null")
     private String surname;
 
+    @ApiModelProperty(value = "Password of the Employee", required = true, example = "prueba")
     @NotBlank(message = "Password can not be null")
     private String password;
 
