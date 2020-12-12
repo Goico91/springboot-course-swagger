@@ -1,0 +1,23 @@
+# ===================================================================
+# Fichero de configuración Entorno Desarrollo
+# ===================================================================
+
+# # ===============================
+# = HTTP Server
+# # ===============================
+server:
+  port: 8080
+
+# # ===============================
+# = SPRING BOOT GENERAL
+# # ===============================
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:33060/springboot_course_db
+    username: root
+    password: secret
+  jpa:
+    show-sql: true
